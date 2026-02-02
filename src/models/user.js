@@ -1,3 +1,4 @@
+const validator=require('validator');
 const mongoose=require('mongoose');
 const {Schema}=mongoose;
 const userSchema=new Schema({
@@ -5,12 +6,14 @@ const userSchema=new Schema({
     type:String,
     required:true,
     minLength:3,
-    maxLength:20
+    maxLength:20,
+    trim:true
   },
   lastName:{
     type:String,
     minLength:3,
-    maxLength:20
+    maxLength:20,
+    trim:true
   },
   emailId:{
     type:String,
@@ -18,7 +21,14 @@ const userSchema=new Schema({
     unique:true,
     trim:true,
     lowercase:true,
-    immutable:true
+    immutable:true,
+    // never believe just on controllers we should always ass index and this in email check
+    validate: {
+      validator: validator.isEmail,
+      message: 'Invalid email format'
+    },
+    // this will increase it's search speed in DB in a query
+    index:true
   },
   age:{
     type:Number,
@@ -26,18 +36,23 @@ const userSchema=new Schema({
     max:80
   },
   role:{
-    type:string,
+    type:String,
     enum:["user","admin"],
     default:"user"
   },
   problemSolved:{
-    type:[String]
+    type:[String],
+    default:[]
   },
   password:{
-    type:string,
-    required:true
+    type:String,
+    required:true,
   },
-},{timeStamps:true});
-
+},
+{
+  timestamps:true
+}
+);
 const User=mongoose.model("user",userSchema);
+// Export the Use
 module.exports=User;
