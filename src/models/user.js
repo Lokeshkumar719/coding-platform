@@ -22,7 +22,7 @@ const userSchema=new Schema({
     trim:true,
     lowercase:true,
     immutable:true,
-    // never believe just on controllers we should always ass index and this in email check
+    // never believe just on controllers we should always add index and this in email check
     validate: {
       validator: validator.isEmail,
       message: 'Invalid email format'
