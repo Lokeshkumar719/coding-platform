@@ -29,4 +29,5 @@ const userMiddleware=async(req,res,next)=>{
     res.status(401).send("Error: "+err.message);
   }
 };
+
 module.exports=userMiddleware;

@@ -1,0 +1,53 @@
+const mongoose=require('mongoose');
+const { use, memo } = require('react');
+const {Schema}=mongoose;
+
+const submissionSchema=new Schema({
+  userId:{
+    type:Schema.Types.ObjectId,
+    ref:"user",
+    required:true
+  },
+  problemId:{
+    type:Schema.Types.ObjectId,
+    ref:"Problem",
+    required:true
+  },
+  code:{
+    type:String,
+    required:true
+  },
+  language:{
+    type:String,
+    enum:["c++","java","javascript"],
+    required:true
+  },
+  status:{
+    type:String,
+    enum:["pending","accepted","wrong","error"],
+    default:"pending"
+  },
+  runtime:{
+    type:Number,
+    default:0
+  },
+  memory:{  
+    type:Number,
+    default:0
+  },
+  testCasesPassed:{
+    type:Number,
+    default:0
+  },
+  testCasesTotal:{
+    type:Number,
+    default:0
+  }
+},
+{
+  timestamps:true
+}
+);
+
+const Submission=mongoose.model("submission",submissionSchema);
+module.exports=Submission;                                          

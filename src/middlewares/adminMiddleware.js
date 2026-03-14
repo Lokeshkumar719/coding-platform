@@ -29,11 +29,13 @@ const adminMiddleware=async(req,res,next)=>{
     const isBlocked=await redisClient.exists(`token:${token}`);
     if(isBlocked)
       throw new Error("Invalid Token");
-    
+
+    // if the token is valid and not blocked then we will allow the user to access the admin routes and also we will pass the user details in the request object for further use in the controllers
     req.result=result;
     next();
   }catch(err){
     res.status(401).send("Error: "+err.message);
   }
 };
+
 module.exports=adminMiddleware;

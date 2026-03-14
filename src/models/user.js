@@ -54,5 +54,5 @@ const userSchema=new Schema({
 }
 );
 const User=mongoose.model("user",userSchema);
-// Export the Use
+// Export the User
 module.exports=User;
