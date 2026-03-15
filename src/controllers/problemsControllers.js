@@ -1,8 +1,7 @@
 const {getLanguageById,submitBatch,submitToken} = require('../utils/problemUtility');
 const Problem=require('../models/problems');
 
-
-const createProbelm=async (req,res)=>{
+const createProblem=async (req,res)=>{
 
   const {title,description,difficulty,tags,visibleTestcases,hiddenTestcases,startCode,problemCreater,referenceSolution}=req.body;
 
@@ -62,6 +61,7 @@ const updateProblem=async(req,res)=>{
 
 
     for(const {language,completeCode} of referenceSolution){
+      console.log("Reading refernce solution");
       const languageId=getLanguageById(language);
       if(!languageId){
         return res.status(400).json({error:`Unsupported language: ${language}`});
@@ -75,7 +75,6 @@ const updateProblem=async(req,res)=>{
         expected_output: testCase.output,
       }));
 
-      // console.log(submission);
 
       const submitResult=await submitBatch(submission);
       // get the tokens from the subminResult
@@ -89,6 +88,7 @@ const updateProblem=async(req,res)=>{
         }
       }
     }
+
     // if all the reference solutions are correct then we will update the problem in the database;
     const newProblem=await Problem.findByIdAndUpdate(id,{...req.body},{runValidators:true,new:true});
     res.status(200).send(newProblem);
@@ -120,7 +120,7 @@ const getProblemById=async(req,res)=>{
     if(!id)
       return res.status(400).json({error:"Problem id is required"});
 
-    const reqdProblem=await Problem.find(id);
+    const reqdProblem=await Problem.findById(id).select('_id title description difficulty tags visibleTestcases startCode referenceSolution');
     if(!reqdProblem)
       return res.status(404).json({error:"Problem not found"});
 
@@ -132,7 +132,7 @@ const getProblemById=async(req,res)=>{
 
 const getAllProblems=async(req,res)=>{
   try{
-    const allProblems=await Problem.find({});
+    const allProblems=await Problem.find({}).select('_id title difficulty tags');
     if(!allProblems || allProblems.length===0)
       return res.status(404).json({error:"No problems found"});
     
@@ -141,4 +141,5 @@ const getAllProblems=async(req,res)=>{
     return res.status(500).send("Error Occured: "+err.message);
   }
 };
-module.exports={createProbelm,updateProblem,deleteProblem,getProblemById,getAllProblems};
+
+module.exports={createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems};
