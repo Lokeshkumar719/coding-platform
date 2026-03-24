@@ -1,7 +1,7 @@
 const express=require('express');
 const problemRouter=express.Router();
 const adminMiddleware=require('../middlewares/adminMiddleware');
-const {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems}=require('../controllers/problemsControllers');
+const {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems,solvedProblems}=require('../controllers/problemsControllers');
 const userMiddleware=require('../middlewares/userMiddleware');
 // create fetch update delete problem routes here and export the router
 
@@ -13,6 +13,6 @@ problemRouter.delete('/delete/:id',adminMiddleware,deleteProblem);
 
 problemRouter.get('/problemById/:id',userMiddleware,getProblemById);
 problemRouter.get('/getAllProblems',userMiddleware,getAllProblems);
-// problemRouter.get('problemSolvedByUser',userMiddleware,solvedProblems);
+problemRouter.get('/problemSolvedByUser',userMiddleware,solvedProblems);
 
 module.exports=problemRouter;

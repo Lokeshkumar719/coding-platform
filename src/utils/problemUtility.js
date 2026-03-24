@@ -2,9 +2,7 @@ require('dotenv').config();
 const axios = require('axios');
 
 const getLanguageById = (lang) => {
-
   // console.log(lang);
-
   const languages={
     "c++":54,
     "java":62,
@@ -50,14 +48,12 @@ const submitBatch=async (submissions)=>{
       //     "token": "string",}
       // ]   
       const response = await axios.request(options);
-      // console.log(response.data);
       return response.data;
     } catch (error) {
-      console.error(error);
+      console.error("The error is: "+error);
       throw error;
     }
   }
-
   return await fetchData();
 };
 
@@ -65,8 +61,9 @@ const waiting = (timer) => {
   return new Promise((resolve) => setTimeout(resolve, timer));
 }
 
-const submitToken=async (resultTokens)=>{
 
+const submitToken=async (resultTokens)=>{
+  
   const options = {
     method: 'GET',
     url: 'https://judge0-ce.p.rapidapi.com/submissions/batch',

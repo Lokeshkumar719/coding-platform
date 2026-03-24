@@ -1,5 +1,6 @@
 const {getLanguageById,submitBatch,submitToken} = require('../utils/problemUtility');
 const Problem=require('../models/problems');
+const User = require('../models/user');
 
 const createProblem=async (req,res)=>{
 
@@ -27,6 +28,8 @@ const createProblem=async (req,res)=>{
       const resultTokens=submitResult.map(result=>result.token);
 
       const testResult=await submitToken(resultTokens);
+
+      console.log(testResult);
 
       for(const test of testResult){
         if(test.status_id!==3){
@@ -142,4 +145,18 @@ const getAllProblems=async(req,res)=>{
   }
 };
 
-module.exports={createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems};
+const solvedProblems=async(req,res)=>{
+  try{
+    const userId=req.result._id;
+    const user=await User.findById(userId).populate({
+      path:"problemSolved",
+      select:"_id title difficulty tags"
+    });
+    console.log(user.problemSolved);
+    res.status(200).send(user.problemSolved);
+  }catch(err){
+    res.status(500).send('server error occured'+err);
+  }
+}
+
+module.exports={createProblem,updateProblem,deleteProblem,getProblemById,getAllProblems,solvedProblems};
