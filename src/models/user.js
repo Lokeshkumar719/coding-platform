@@ -54,8 +54,15 @@ const userSchema=new Schema({
 },
 {
   timestamps:true
-}
-);
+});
+
+userSchema.post('findOneAndDelete',async function (userInfo) {
+  if(userInfo){
+    // not capital S in submission 
+    await mongoose.model('submission').deleteMany({userId:userInfo._id});
+  }
+});
+
 const User=mongoose.model("user",userSchema);
 // Export the User
 module.exports=User;

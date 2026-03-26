@@ -48,5 +48,8 @@ const submissionSchema=new Schema({
 }
 );
 
+// index the combination of userId and problem id which will help to get userSubmissions for a problem 1 1 for ascending order 
+submissionSchema.index({userId:1,problemId:1});
+
 const Submission=mongoose.model("submission",submissionSchema);
 module.exports=Submission;                                          
