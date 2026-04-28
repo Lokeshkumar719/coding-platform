@@ -11,7 +11,7 @@ const validateUser=async(data)=>{
     throw new Error("Invalid Email");
 
   if(!validator.isStrongPassword(data.password))
-    throw new Error("Week Password");
+    throw new Error("Weak Password");
 
   // .trim() is used to remove the leading and trailing spaces from the string
   const name = (data.firstName)?.trim();

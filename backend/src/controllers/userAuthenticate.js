@@ -19,7 +19,12 @@ const register=async (req,res)=>{
     // hash the password
     req.body.password= await bcrypt.hash(password,10);
     const user=await User.create(req.body);
-    
+    // This is info that we will send to frontend when user register
+    const reply={
+      firstName:user.firstName,
+      emailId:user.emailId,
+      _id:user._id
+    };
     // send the JWT and assign the role to the user in the JWT payload so that we can use it in the future for authorization
     const token=jwt.sign({id:user._id,emailId:user.emailId,role:'user'},process.env.JWT_KEY,{expiresIn:60*60});
     res.cookie('token', token, {
@@ -27,9 +32,15 @@ const register=async (req,res)=>{
       httpOnly: true,
       sameSite: 'strict'
     });
-    res.status(201).send("User Registered Successfully");
+
+    res.status(201).json({
+      user:reply,
+      message:"Logged in Successfully"
+    });
   }catch(err){
-    res.status(400).send("Error "+err);
+    res.status(400).json({
+      message: err.message
+    });
   }
 };
 
@@ -46,6 +57,13 @@ const login=async (req,res)=>{
     const match=bcrypt.compare(password, user.password);
     if(!match)
       throw new Error("Invalid Credentials");
+
+    // This is info that we will send to frontend when user login
+    const reply={
+      firstName:user.firstName,
+      emailId:user.emailId,
+      _id:user._id
+    };
     // send the JWT and assign the role to the user in the JWT payload so that we can use it in the future for authorization
     const token=jwt.sign({id:user._id,emailId:user.emailId,role:user.role},process.env.JWT_KEY,{expiresIn:60*60});
     //Always add these two to ensure frontend don't access JWT and Cookie is sent ONLY when request comes from your own site.
@@ -54,7 +72,10 @@ const login=async (req,res)=>{
       httpOnly: true,
       sameSite: 'strict'
     });   
-    res.status(200).send("Logged In Successfully");
+    res.status(201).json({
+      user:reply,
+      message:"Logged in Successfully"
+    });
   }catch(err){
     res.status(401).send("Error: "+err);
   }

@@ -136,6 +136,7 @@ const getProblemById=async(req,res)=>{
 
 const getAllProblems=async(req,res)=>{
   try{
+    // console.log('i have entered here');
     const allProblems=await Problem.find({}).select('_id title difficulty tags');
     if(!allProblems || allProblems.length===0)
       return res.status(404).json({error:"No problems found"});
@@ -153,7 +154,6 @@ const solvedProblems=async(req,res)=>{
       path:"problemSolved",
       select:"_id title difficulty tags"
     });
-    console.log(user.problemSolved);
     res.status(200).send(user.problemSolved);
   }catch(err){
     res.status(500).send('server error occured'+err);
