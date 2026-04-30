@@ -4,8 +4,7 @@ const User = require('../models/user');
 const Submission=require('../models/submission');
 
 const createProblem=async (req,res)=>{
-
-  const {title,description,difficulty,tags,visibleTestcases,hiddenTestcases,startCode,problemCreater,referenceSolution}=req.body;
+  const {title,description,difficulty,tags,visibleTestCases,hiddenTestCases,startCode,problemCreater,referenceSolution}=req.body;
 
   try{
     for(const {language,completeCode} of referenceSolution){
@@ -13,9 +12,10 @@ const createProblem=async (req,res)=>{
       if(!languageId){
         return res.status(400).json({error:`Unsupported language: ${language}`});
       }
-
+      console.log('lanhuageId:',languageId);
+      console.log(visibleTestCases);
       // batch submission to judge0 for reference solution and store the results
-      const submission=visibleTestcases.map((testCase)=>({
+      const submission=visibleTestCases.map((testCase)=>({
         source_code: completeCode,
         language_id: languageId,
         stdin: testCase.input,
@@ -42,11 +42,11 @@ const createProblem=async (req,res)=>{
     await Problem.create({
       ... req.body,
       // we will get the problemCreater from the adminMiddleware(stored in request itself) and it will be the id of the admin who is creating the problem
-      problemsCreater:req.result._id,
+      problemCreator:req.result._id,
     });
-
     res.send("Problem Created Successfully");
   }catch(err){
+    console.log(err);
     res.status(500).json({error:"Error Occured: "+err.message});
   }
 }
@@ -124,7 +124,7 @@ const getProblemById=async(req,res)=>{
     if(!id)
       return res.status(400).json({error:"Problem id is required"});
 
-    const reqdProblem=await Problem.findById(id).select('_id title description difficulty tags visibleTestcases startCode referenceSolution');
+    const reqdProblem=await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution');
     if(!reqdProblem)
       return res.status(404).json({error:"Problem not found"});
 

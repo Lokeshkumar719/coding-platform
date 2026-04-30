@@ -13,15 +13,15 @@ const problemSchema = new Schema({
     },
     difficulty: {
       type: String,
-      enum: ['Easy', 'Medium', 'Hard'],
+      enum: ['easy', 'medium', 'hard'],
       required: true
     },
     tags:{
-      enum: ['Array', 'String', 'Dynamic Programming', 'Graph', 'Tree', 'Math', 'Greedy', 'Backtracking', 'Hash Table', 'Two Pointers', 'Sliding Window', 'Divide and Conquer'],
+      enum: ['array', 'linkedList', 'graph', 'dp'],
       type: [String],
       required: true
     },
-    visibleTestcases:[
+    visibleTestCases:[
       {
         input:{
           type: String,
@@ -37,7 +37,7 @@ const problemSchema = new Schema({
         }
       }
     ],
-    hiddenTestcases:[
+    hiddenTestCases:[
       {
         input:{
           type: String,

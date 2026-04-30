@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from "./authSlice";
 import { useEffect } from "react";
 import AdminPanel from "./pages/AdminPanel";
+import ProblemPage from "./pages/ProblemPage"
 
 function App(){
   
@@ -16,8 +17,6 @@ function App(){
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
-
-
   
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">
@@ -32,6 +31,7 @@ function App(){
       <Route path="/login" element={isAuthenticated?<Navigate to="/" />:<Login></Login>}></Route>
       <Route path="/signup" element={isAuthenticated?<Navigate to="/" />:<Signup></Signup>}></Route>
       <Route path="/admin" element={<AdminPanel/>}></Route>
+      <Route path="/problem/:problemId" element={<ProblemPage/>}></Route>
       {/* <Route 
         path="/admin" 
         element={

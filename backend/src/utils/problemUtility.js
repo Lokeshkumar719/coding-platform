@@ -2,9 +2,9 @@ require('dotenv').config();
 const axios = require('axios');
 
 const getLanguageById = (lang) => {
-  // console.log(lang);
+  console.log(lang);
   const languages={
-    "c++":54,
+    "cpp":54,
     "java":62,
     "javascript":63,
   }
